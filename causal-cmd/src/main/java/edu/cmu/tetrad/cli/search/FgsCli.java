@@ -133,19 +133,19 @@ public class FgsCli {
      */
     public static void main(String[] args) {
         if (args == null || args.length == 0 || Args.hasLongOption(args, "help")) {
-            Args.showHelp("fgs", MAIN_OPTIONS);
+            Args.showHelp("fgsc", MAIN_OPTIONS);
             return;
         }
 
         parseArgs(args);
 
         System.out.println("================================================================================");
-        System.out.printf("FGS Discrete (%s)%n", DateTime.printNow());
+        System.out.printf("FGS (%s)%n", DateTime.printNow());
         System.out.println("================================================================================");
 
         String argInfo = createArgsInfo();
         System.out.println(argInfo);
-        LOGGER.info("=== Starting FGS Discrete: " + Args.toString(args, ' '));
+        LOGGER.info("=== Starting FGS: " + Args.toString(args, ' '));
         LOGGER.info(argInfo.trim().replaceAll("\n", ",").replaceAll(" = ", "="));
 
         Set<String> excludedVariables = (excludedVariableFile == null) ? Collections.EMPTY_SET : getExcludedVariables();
@@ -414,14 +414,14 @@ public class FgsCli {
             verbose = cmd.hasOption("verbose");
             numOfThreads = Args.getInteger(cmd.getOptionValue("thread", Integer.toString(Runtime.getRuntime().availableProcessors())));
             dirOut = Args.getPathDir(cmd.getOptionValue("out", "."), false);
-            outputPrefix = cmd.getOptionValue("output-prefix", String.format("fgs_%s_%d", dataFile.getFileName(), System.currentTimeMillis()));
+            outputPrefix = cmd.getOptionValue("output-prefix", String.format("fgsc_%s_%d", dataFile.getFileName(), System.currentTimeMillis()));
             validationOutput = !cmd.hasOption("no-validation-output");
 
             skipUniqueVarName = cmd.hasOption("skip-unique-var-name");
             skipZeroVariance = cmd.hasOption("skip-non-zero-variance");
         } catch (ParseException | FileNotFoundException exception) {
             System.err.println(exception.getLocalizedMessage());
-            Args.showHelp("fgs", MAIN_OPTIONS);
+            Args.showHelp("fgsc", MAIN_OPTIONS);
             System.exit(-127);
         }
     }

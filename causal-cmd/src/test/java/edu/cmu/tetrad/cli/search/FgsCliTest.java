@@ -63,8 +63,8 @@ public class FgsCliTest {
 
         String data = dataFile.toAbsolutePath().toString();
         String delimiter = "\t";
-        String dirOut = tmpDir.newFolder("fgs").toString();
-        String outputPrefix = "fgs";
+        String dirOut = tmpDir.newFolder("fgsc").toString();
+        String outputPrefix = "fgsc";
         String[] args = {
             "--data", data,
             "--delimiter", delimiter,
@@ -93,8 +93,8 @@ public class FgsCliTest {
         Path variableFile = Paths.get("test", "data", "variables.txt");
 
         String delimiter = ",";
-        String dirOut = tmpDir.newFolder("fgs_exclude_variables").toString();
-        String outputPrefix = "fgs";
+        String dirOut = tmpDir.newFolder("fgsc_exclude_variables").toString();
+        String outputPrefix = "fgsc";
         String[] args = {
             "--data", dataFile.toAbsolutePath().toString(),
             "--delimiter", delimiter,

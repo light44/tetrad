@@ -59,9 +59,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kevin V. Bui (kvb2@pitt.edu)
  */
-public class FgsDiscrete {
+public class FgsDiscreteCli {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FgsDiscrete.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FgsDiscreteCli.class);
 
     public static final int CATEGORY_LIMIT = 10;
 
@@ -133,7 +133,7 @@ public class FgsDiscrete {
      */
     public static void main(String[] args) {
         if (args == null || args.length == 0 || Args.hasLongOption(args, "help")) {
-            Args.showHelp("fgs-discrete", MAIN_OPTIONS);
+            Args.showHelp("fgsd", MAIN_OPTIONS);
             return;
         }
 
@@ -420,7 +420,7 @@ public class FgsDiscrete {
             skipCategoryLimit = cmd.hasOption("skip-category-limit");
         } catch (ParseException | FileNotFoundException exception) {
             System.err.println(exception.getLocalizedMessage());
-            Args.showHelp("fgs-discrete", MAIN_OPTIONS);
+            Args.showHelp("fgsd", MAIN_OPTIONS);
             System.exit(-127);
         }
     }

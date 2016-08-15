@@ -50,7 +50,7 @@ public class FgsDiscreteTest {
     }
 
     /**
-     * Test of main method, of class FgsDiscrete.
+     * Test of main method, of class FgsDiscreteCli.
      *
      * @throws IOException
      */
@@ -63,8 +63,8 @@ public class FgsDiscreteTest {
 
         String data = dataFile.toAbsolutePath().toString();
         String delimiter = ",";
-        String dirOut = tmpDir.newFolder("fgs").toString();
-        String outputPrefix = "fgs";
+        String dirOut = tmpDir.newFolder("fgsd").toString();
+        String outputPrefix = "fgsd";
         String[] args = {
             "--data", data,
             "--delimiter", delimiter,
@@ -72,7 +72,7 @@ public class FgsDiscreteTest {
             "--verbose",
             "--output-prefix", outputPrefix
         };
-        FgsDiscrete.main(args);
+        FgsDiscreteCli.main(args);
 
         Path outFile = Paths.get(dirOut, outputPrefix + ".txt");
         String errMsg = outFile.getFileName().toString() + " does not exist.";

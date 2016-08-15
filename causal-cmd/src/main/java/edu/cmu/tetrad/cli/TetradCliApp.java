@@ -19,7 +19,8 @@
 package edu.cmu.tetrad.cli;
 
 import edu.cmu.tetrad.cli.search.FgsCli;
-import edu.cmu.tetrad.cli.search.FgsDiscrete;
+import edu.cmu.tetrad.cli.search.FgsDiscreteCli;
+import edu.cmu.tetrad.cli.search.GfciCli;
 import edu.cmu.tetrad.cli.util.Args;
 import java.io.IOException;
 import java.util.jar.Attributes;
@@ -71,11 +72,14 @@ public class TetradCliApp {
             } else {
                 args = Args.removeOption(args, "algorithm");
                 switch (algorithm) {
-                    case "fgs":
+                    case "fgsc":
                         FgsCli.main(args);
                         break;
-                    case "fgs-discrete":
-                        FgsDiscrete.main(args);
+                    case "fgsd":
+                        FgsDiscreteCli.main(args);
+                        break;
+                    case "gfci":
+                        GfciCli.main(args);
                         break;
                     default:
                         System.err.printf("Unknown algorithm: %s\n", algorithm);
