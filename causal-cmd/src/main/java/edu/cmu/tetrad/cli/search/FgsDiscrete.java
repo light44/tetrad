@@ -55,6 +55,9 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  *
  * Mar 28, 2016 4:10:20 PM
@@ -97,6 +100,7 @@ public class FgsDiscrete {
         // output results
         MAIN_OPTIONS.addOption(null, "graphml", false, "Create graphML output.");
         MAIN_OPTIONS.addOption(null, "json", false, "Create JSON output.");
+        MAIN_OPTIONS.addOption(null, "tetrad-graph-json", false, "Create Tetrad Graph JSON output.");
 
         // data validations
         MAIN_OPTIONS.addOption(null, "skip-unique-var-name", false, "Skip 'unique variable name' check.");
@@ -120,6 +124,7 @@ public class FgsDiscrete {
     private static boolean heuristicSpeedup;
     private static boolean graphML;
     private static boolean isSerializeJson;
+    private static boolean tetradGraphJson;
     private static boolean verbose;
     private static int numOfThreads;
 
@@ -180,6 +185,10 @@ public class FgsDiscrete {
                 writeOutJson(graph, Paths.get(dirOut.toString(), outputPrefix + "_graph.json"));
             }
 
+            if(tetradGraphJson){
+            	writeOutTetradGraphJson(graph, Paths.get(dirOut.toString(), outputPrefix + ".json"));
+            }
+            
         } catch (IOException exception) {
             LOGGER.error("FGS Discrete failed.", exception);
             System.err.printf("%s: FGS Discrete failed.%n", DateTime.printNow());
@@ -190,6 +199,32 @@ public class FgsDiscrete {
         LOGGER.info(String.format("FGS Discrete finished!  Please see %s for details.", outputFile.getFileName().toString()));
     }
 
+    private static void writeOutTetradGraphJson(Graph graph, Path outputFile){
+    	if (graph == null) {
+            return;
+        }
+
+        try (PrintStream graphWriter = new PrintStream(new BufferedOutputStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE)))) {
+            String fileName = outputFile.getFileName().toString();
+
+            String msg = String.format("Writing out Tetrad Graph Json file '%s'.", fileName);
+            System.out.printf("%s: %s%n", DateTime.printNow(), msg);
+            LOGGER.info(msg);
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            graphWriter.print(gson.toJson(graph));
+
+            msg = String.format("Finished writing out Tetrad Graph Json file '%s'.", fileName);
+            System.out.printf("%s: %s%n", DateTime.printNow(), msg);
+            LOGGER.info(msg);
+
+        } catch (Throwable throwable) {
+            String errMsg = String.format("Failed when writing out Tetrad Graph Json file '%s'.", outputFile.getFileName().toString());
+            System.err.println(errMsg);
+            LOGGER.error(errMsg, throwable);
+        }
+    }
+    
     private static void writeOutGraphML(Graph graph, Path outputFile) {
         if (graph == null) {
             return;
@@ -387,6 +422,8 @@ public class FgsDiscrete {
         fmt.format("depth = %d%n", depth);
         fmt.format("heuristic-speedup = %s%n", heuristicSpeedup);
         fmt.format("graphml = %s%n", graphML);
+        fmt.format("json = %s%n", isSerializeJson);
+        fmt.format("tetrad-graph-json = %s%n", tetradGraphJson);
 
         fmt.format("skip-unique-var-name = %s%n", skipUniqueVarName);
         fmt.format("skip-category-limit = %s%n", skipCategoryLimit);
@@ -412,6 +449,7 @@ public class FgsDiscrete {
             heuristicSpeedup = !cmd.hasOption("disable-heuristic-speedup");
             graphML = cmd.hasOption("graphml");
             isSerializeJson = cmd.hasOption("json");
+            tetradGraphJson = cmd.hasOption("tetrad-graph-json");
             verbose = cmd.hasOption("verbose");
             numOfThreads = Args.getInteger(cmd.getOptionValue("thread", Integer.toString(Runtime.getRuntime().availableProcessors())));
             dirOut = Args.getPathDir(cmd.getOptionValue("out", "."), false);
