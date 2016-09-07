@@ -31,6 +31,8 @@ package edu.cmu.tetrad.graph;
 public final class AtMostOneEdgePerPair implements GraphConstraint {
     static final long serialVersionUID = 23L;
 
+    private final String name = "AtMostOneEdgePerPair";
+    
     //=============================CONSTRUCTORS===========================//
 
     public AtMostOneEdgePerPair() {
@@ -83,6 +85,7 @@ public final class AtMostOneEdgePerPair implements GraphConstraint {
     public String toString() {
         return "<At most one edge per node pair.>";
     }
+
 }
 
 

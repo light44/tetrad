@@ -30,6 +30,8 @@ package edu.cmu.tetrad.graph;
 public final class DirectedEdgesOnly implements GraphConstraint {
     static final long serialVersionUID = 23L;
 
+    private final String name = "DirectedEdgesOnly";
+    
     //=============================CONSTRUCTORS===========================//
 
     public DirectedEdgesOnly() {

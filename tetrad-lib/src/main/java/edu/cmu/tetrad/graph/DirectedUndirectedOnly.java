@@ -31,6 +31,8 @@ package edu.cmu.tetrad.graph;
 public final class DirectedUndirectedOnly implements GraphConstraint {
     static final long serialVersionUID = 23L;
 
+    private final String name = "DirectedUndirectedOnly";
+    
     //=============================CONSTRUCTORS===========================//
 
     public DirectedUndirectedOnly() {

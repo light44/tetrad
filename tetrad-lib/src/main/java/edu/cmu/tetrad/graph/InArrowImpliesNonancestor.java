@@ -35,6 +35,8 @@ package edu.cmu.tetrad.graph;
 public final class InArrowImpliesNonancestor implements GraphConstraint {
     static final long serialVersionUID = 23L;
 
+    private final String name = "InArrowImpliesNonancestor";
+    
     //=============================CONSTRUCTORS===========================//
 
     public InArrowImpliesNonancestor() {

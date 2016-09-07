@@ -31,6 +31,8 @@ package edu.cmu.tetrad.graph;
 public final class NoEdgesToSelf implements GraphConstraint {
     static final long serialVersionUID = 23L;
 
+    private final String name = "NoEdgesToSelf";
+    
     //=============================CONSTRUCTORS===========================//
 
     public NoEdgesToSelf() {
