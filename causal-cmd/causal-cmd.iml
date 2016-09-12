@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/jaxb" isTestSource="false" generated="true" />
       <excludeFolder url="file://$MODULE_DIR$/target/archive-tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/target/causal-cmd-5.3.0-20160823" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/dist" />
       <excludeFolder url="file://$MODULE_DIR$/target/jaxb2" />
