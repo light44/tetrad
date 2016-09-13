@@ -18,7 +18,16 @@
  */
 package edu.cmu.tetrad.cli;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  *
@@ -28,18 +37,48 @@ import org.junit.Test;
  */
 public class CausalCmdApplicationTest {
 
+    @ClassRule
+    public static TemporaryFolder tmpDir = new TemporaryFolder();
+
     public CausalCmdApplicationTest() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        tmpDir.delete();
     }
 
     /**
      * Test of main method, of class CausalCmdApplication.
+     *
+     * @throws IOException
      */
     @Test
-    public void testMain() {
-        String[] args = null;
-        System.out.println("================================================================================");
+    public void testMain() throws IOException {
+        Path dataFile = Paths.get("test", "data", "diff_delim", "sim_data_20vars_100cases.csv");
+
+        String data = dataFile.toAbsolutePath().toString();
+        String delimiter = ",";
+        String dirOut = tmpDir.newFolder("fgsc").toString();
+        String outputPrefix = "fgs";
+        String[] args = {
+            "--algorithm", "fgsc",
+            "--data", data,
+            "--delimiter", delimiter,
+            "--out", dirOut,
+            "--verbose",
+            "--output-prefix", outputPrefix,
+            "--json"
+        };
         CausalCmdApplication.main(args);
-        System.out.println("================================================================================");
+
+        Path outFile = Paths.get(dirOut, outputPrefix + ".txt");
+        String errMsg = outFile.getFileName().toString() + " does not exist.";
+        Assert.assertTrue(errMsg, Files.exists(outFile, LinkOption.NOFOLLOW_LINKS));
+
+        outFile = Paths.get(dirOut, outputPrefix + "_graph.json");
+        errMsg = outFile.getFileName().toString() + " does not exist.";
+        Assert.assertTrue(errMsg, Files.exists(outFile, LinkOption.NOFOLLOW_LINKS));
     }
 
 }

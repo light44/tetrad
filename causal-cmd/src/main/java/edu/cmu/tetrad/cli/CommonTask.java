@@ -18,12 +18,23 @@
  */
 package edu.cmu.tetrad.cli;
 
+import edu.cmu.tetrad.algcomparison.algorithm.Algorithm;
+import edu.cmu.tetrad.cli.data.IKnowledgeFactory;
 import edu.cmu.tetrad.cli.util.AppTool;
+import edu.cmu.tetrad.cli.util.DateTime;
 import edu.cmu.tetrad.cli.util.FileIO;
+import edu.cmu.tetrad.cli.util.JsonSerializer;
 import edu.cmu.tetrad.data.DataSet;
+import edu.cmu.tetrad.data.IKnowledge;
+import edu.cmu.tetrad.graph.Graph;
 import edu.cmu.tetrad.io.DataReader;
+import edu.cmu.tetrad.util.Parameters;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -35,17 +46,19 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kevin V. Bui (kvb2@pitt.edu)
  */
-public class CommonTask {
+public abstract class CommonTask {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonTask.class);
 
     private void logStartTask(String task) {
-        System.out.printf("%s: Start %s.%n", AppTool.fmtDateNow(), task);
+        String msg = String.format("%s: Start %s.", AppTool.fmtDateNow(), task);
+        System.out.println(msg);
         LOGGER.info(String.format("Start %s.", task));
     }
 
     private void logEndTask(String task) {
-        System.out.printf("%s: End %s.%n", AppTool.fmtDateNow(), task);
+        String msg = String.format("%s: End %s.", AppTool.fmtDateNow(), task);
+        System.out.println(msg);
         LOGGER.info(String.format("End %s.", task));
     }
 
@@ -53,6 +66,56 @@ public class CommonTask {
         String errMsg = String.format("Failed %s.", task);
         System.err.println(errMsg);
         LOGGER.error(errMsg, exception);
+    }
+
+    protected void writeOutJson(String graphId, Graph graph, Path outputFile) {
+        if (graph == null) {
+            return;
+        }
+
+        try (PrintStream graphWriter = new PrintStream(new BufferedOutputStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE)))) {
+            String fileName = outputFile.getFileName().toString();
+
+            String msg = String.format("Writing out Json file '%s'.", fileName);
+            System.out.printf("%s: %s%n", DateTime.printNow(), msg);
+            LOGGER.info(msg);
+
+            JsonSerializer.writeToStream(JsonSerializer.serialize(graph, graphId), graphWriter);
+
+            msg = String.format("Finished writing out Json file '%s'.", fileName);
+            System.out.printf("%s: %s%n", DateTime.printNow(), msg);
+            LOGGER.info(msg);
+        } catch (Throwable throwable) {
+            String errMsg = String.format("Failed when writing out Json file '%s'.", outputFile.getFileName().toString());
+            System.err.println(errMsg);
+            LOGGER.error(errMsg, throwable);
+        }
+    }
+
+    protected Graph search(DataSet dataSet, Algorithm algorithm, Parameters parameters) {
+        String task = "running algorithm " + algorithm.getDescription();
+        logStartTask(task);
+        Graph graph = algorithm.search(dataSet, parameters);
+        logEndTask(task);
+
+        return graph;
+    }
+
+    protected IKnowledge readInPriorKnowledge(Path knowledgeFile) {
+        IKnowledge knowledge = null;
+
+        if (knowledgeFile != null) {
+            String task = "reading in prior knowledge file " + knowledgeFile.getFileName();
+            logStartTask(task);
+            try {
+                knowledge = IKnowledgeFactory.readInKnowledge(knowledgeFile);
+            } catch (IOException exception) {
+                logFailedTask(task, exception);
+            }
+            logEndTask(task);
+        }
+
+        return knowledge;
     }
 
     protected DataSet readInDataSet(Set<String> excludedVariables, Path dataFile, DataReader dataReader) {

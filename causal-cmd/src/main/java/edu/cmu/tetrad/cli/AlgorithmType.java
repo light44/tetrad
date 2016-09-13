@@ -20,12 +20,29 @@ package edu.cmu.tetrad.cli;
 
 /**
  *
- * Sep 6, 2016 1:55:40 PM
+ * Sep 12, 2016 2:18:53 PM
  *
  * @author Kevin V. Bui (kvb2@pitt.edu)
  */
-public interface AlgorithmCli {
+public enum AlgorithmType {
 
-    public void run();
+    FGSC("FGS Continuous", "fgsc");
+
+    private final String title;
+
+    private final String cmd;
+
+    private AlgorithmType(String title, String cmd) {
+        this.title = title;
+        this.cmd = cmd;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getCmd() {
+        return cmd;
+    }
 
 }

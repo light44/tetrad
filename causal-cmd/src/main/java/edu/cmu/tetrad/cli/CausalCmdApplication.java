@@ -21,6 +21,8 @@ package edu.cmu.tetrad.cli;
 import edu.cmu.tetrad.cli.search.FgscCli;
 import edu.cmu.tetrad.cli.util.AppTool;
 import edu.cmu.tetrad.cli.util.Args;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
@@ -34,28 +36,31 @@ public class CausalCmdApplication {
 
     private static final Options MAIN_OPTIONS = new Options();
 
+    private static final Map<String, AlgorithmType> ALGO_TYPES = new HashMap<>();
+
     static {
         Option requiredOption = new Option(null, "algorithm", true, "Choose one of the following: fgsc, fgsd or gfci.");
         requiredOption.setRequired(true);
         MAIN_OPTIONS.addOption(requiredOption);
 
         MAIN_OPTIONS.addOption(null, "version", false, "Version.");
+
+        for (AlgorithmType algorithmType : AlgorithmType.values()) {
+            ALGO_TYPES.put(algorithmType.getCmd(), algorithmType);
+        }
     }
 
     private static AlgorithmCli getAlgorithmCli(String[] args) {
         String algoSwitch = "algorithm";
         String algorithm = Args.getOptionValue(args, algoSwitch);
-        if (algorithm == null) {
+        AlgorithmType algorithmType = ALGO_TYPES.get(algorithm);
+        if (algorithmType == null) {
             return null;
         } else {
             args = Args.removeOption(args, algoSwitch);
-            switch (algorithm) {
-                case "fgsc":
+            switch (algorithmType) {
+                case FGSC:
                     return new FgscCli(args);
-                case "fgsd":
-                    return null;
-                case "gfci":
-                    return null;
                 default:
                     return null;
             }
@@ -71,6 +76,12 @@ public class CausalCmdApplication {
         } else if (Args.hasLongOption(args, "version")) {
             System.out.println(AppTool.jarVersion());
         } else {
+            AlgorithmCli algorithmCli = getAlgorithmCli(args);
+            if (algorithmCli == null) {
+                AppTool.showHelp(MAIN_OPTIONS);
+            } else {
+                algorithmCli.run();
+            }
         }
     }
 
