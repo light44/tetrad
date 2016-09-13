@@ -29,7 +29,7 @@ import edu.cmu.tetrad.graph.Graph;
 import edu.cmu.tetrad.io.DataReader;
 import edu.cmu.tetrad.io.VerticalTabularDiscreteDataReader;
 import edu.cmu.tetrad.search.BDeuScore;
-import edu.cmu.tetrad.search.Fgs;
+import edu.cmu.tetrad.search.FgsOld;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -44,8 +44,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import edu.cmu.tetrad.search.FgsOld;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -170,7 +168,6 @@ public class FgsDiscrete {
             writer.println();
             writer.println(graph.toString());
 
-
             if (isSerializeJson) {
                 writeOutJson(graph, Paths.get(dirOut.toString(), outputPrefix + "_graph.json"));
             }
@@ -184,7 +181,6 @@ public class FgsDiscrete {
         System.out.printf("%s: FGS Discrete finished!  Please see %s for details.%n", DateTime.printNow(), outputFile.getFileName().toString());
         LOGGER.info(String.format("FGS Discrete finished!  Please see %s for details.", outputFile.getFileName().toString()));
     }
-
 
     private static void writeOutJson(Graph graph, Path outputFile) {
         if (graph == null) {

@@ -7,16 +7,13 @@ import edu.cmu.tetrad.data.DataSet;
 import edu.cmu.tetrad.graph.Graph;
 import edu.cmu.tetrad.io.DataReader;
 import edu.cmu.tetrad.io.TabularContinuousDataReader;
-import edu.cmu.tetrad.search.Fgs;
 import edu.cmu.tetrad.search.FgsOld;
 import edu.cmu.tetrad.search.SemBicScore;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Author : Jeremy Espino MD
- * Created  2/12/16 9:44 AM
+ * Author : Jeremy Espino MD Created 2/12/16 9:44 AM
  */
 public class FgsApiExample {
 

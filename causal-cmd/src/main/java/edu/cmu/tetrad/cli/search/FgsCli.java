@@ -29,7 +29,6 @@ import edu.cmu.tetrad.data.DataSet;
 import edu.cmu.tetrad.graph.Graph;
 import edu.cmu.tetrad.io.DataReader;
 import edu.cmu.tetrad.io.TabularContinuousDataReader;
-import edu.cmu.tetrad.search.Fgs;
 import edu.cmu.tetrad.search.FgsOld;
 import edu.cmu.tetrad.search.SemBicScore;
 import java.io.BufferedOutputStream;
@@ -167,7 +166,6 @@ public class FgsCli {
             writer.println();
             writer.println(graph.toString());
 
-
             if (isSerializeJson) {
                 writeOutJson(graph, Paths.get(dirOut.toString(), outputPrefix + "_graph.json"));
             }
@@ -181,7 +179,6 @@ public class FgsCli {
         System.out.printf("%s: FGS finished!  Please see %s for details.%n", DateTime.printNow(), outputFile.getFileName().toString());
         LOGGER.info(String.format("FGS finished!  Please see %s for details.", outputFile.getFileName().toString()));
     }
-
 
     private static void writeOutJson(Graph graph, Path outputFile) {
         if (graph == null) {
