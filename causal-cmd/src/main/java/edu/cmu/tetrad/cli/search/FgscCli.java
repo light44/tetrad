@@ -23,7 +23,6 @@ import edu.cmu.tetrad.algcomparison.algorithm.oracle.pattern.Fgs;
 import edu.cmu.tetrad.algcomparison.score.SemBicScore;
 import edu.cmu.tetrad.cli.AbstractAlgorithmCli;
 import edu.cmu.tetrad.cli.AlgorithmType;
-import static edu.cmu.tetrad.cli.AlgorithmType.FGSC;
 import edu.cmu.tetrad.cli.util.Args;
 import edu.cmu.tetrad.cli.validation.DataValidation;
 import edu.cmu.tetrad.cli.validation.NonZeroVariance;
@@ -50,14 +49,12 @@ import org.apache.commons.cli.Option;
  */
 public class FgscCli extends AbstractAlgorithmCli {
 
-    public static final AlgorithmType ALGORITHM_TYPE = FGSC;
+    protected double penaltyDiscount;
+    protected int maxInDegree;
+    protected boolean faithfulnessAssumed;
 
-    private double penaltyDiscount;
-    private int maxInDegree;
-    private boolean faithfulnessAssumed;
-
-    private boolean skipUniqueVarName;
-    private boolean skipZeroVariance;
+    protected boolean skipUniqueVarName;
+    protected boolean skipZeroVariance;
 
     public FgscCli(String[] args) {
         super(args);
@@ -157,7 +154,7 @@ public class FgscCli extends AbstractAlgorithmCli {
 
     @Override
     public AlgorithmType getAlgorithmType() {
-        return ALGORITHM_TYPE;
+        return AlgorithmType.FGSC;
     }
 
 }

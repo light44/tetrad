@@ -23,7 +23,6 @@ import edu.cmu.tetrad.algcomparison.algorithm.oracle.pattern.Fgs;
 import edu.cmu.tetrad.algcomparison.score.BdeuScore;
 import edu.cmu.tetrad.cli.AbstractAlgorithmCli;
 import edu.cmu.tetrad.cli.AlgorithmType;
-import static edu.cmu.tetrad.cli.AlgorithmType.FGSD;
 import edu.cmu.tetrad.cli.util.Args;
 import edu.cmu.tetrad.cli.validation.DataValidation;
 import edu.cmu.tetrad.cli.validation.LimitDiscreteCategory;
@@ -49,8 +48,6 @@ import org.apache.commons.cli.Option;
  * @author Kevin V. Bui (kvb2@pitt.edu)
  */
 public class FgsdCli extends AbstractAlgorithmCli {
-
-    public static final AlgorithmType ALGORITHM_TYPE = FGSD;
 
     public static final int CATEGORY_LIMIT = 10;
 
@@ -160,7 +157,7 @@ public class FgsdCli extends AbstractAlgorithmCli {
 
     @Override
     public AlgorithmType getAlgorithmType() {
-        return ALGORITHM_TYPE;
+        return AlgorithmType.FGSD;
     }
 
 }

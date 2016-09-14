@@ -73,7 +73,7 @@ public abstract class AbstractAlgorithmCli extends CommonTask implements Algorit
 
     public abstract void printValidationInfos(Formatter formatter);
 
-    public abstract void printParameterInfos(Formatter formatter);
+    public abstract void printParameterInfos(Formatter fmt);
 
     public abstract Parameters getParameters();
 

@@ -20,6 +20,7 @@ package edu.cmu.tetrad.cli;
 
 import edu.cmu.tetrad.cli.search.FgscCli;
 import edu.cmu.tetrad.cli.search.FgsdCli;
+import edu.cmu.tetrad.cli.search.GfcicCli;
 import edu.cmu.tetrad.cli.util.AppTool;
 import edu.cmu.tetrad.cli.util.Args;
 import java.util.HashMap;
@@ -40,7 +41,17 @@ public class CausalCmdApplication {
     private static final Map<String, AlgorithmType> ALGO_TYPES = new HashMap<>();
 
     static {
-        Option requiredOption = new Option(null, "algorithm", true, "Choose one of the following: fgsc, fgsd or gfci.");
+        AlgorithmType[] algorithmTypes = AlgorithmType.values();
+        StringBuilder algoOpt = new StringBuilder();
+        int lastIndex = algorithmTypes.length - 1;
+        for (int i = 0; i < lastIndex; i++) {
+            algoOpt.append(algorithmTypes[i].getCmd());
+            algoOpt.append(", ");
+        }
+        algoOpt.append(algorithmTypes[lastIndex].getCmd());
+        algoOpt.append(".");
+
+        Option requiredOption = new Option(null, "algorithm", true, algoOpt.toString());
         requiredOption.setRequired(true);
         MAIN_OPTIONS.addOption(requiredOption);
 
@@ -64,6 +75,8 @@ public class CausalCmdApplication {
                     return new FgscCli(args);
                 case FGSD:
                     return new FgsdCli(args);
+                case GFCIC:
+                    return new GfcicCli(args);
                 default:
                     return null;
             }

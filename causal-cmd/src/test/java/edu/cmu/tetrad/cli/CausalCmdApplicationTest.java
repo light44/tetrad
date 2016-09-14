@@ -57,18 +57,19 @@ public class CausalCmdApplicationTest {
     public void testMain() throws IOException {
         Path dataFile = Paths.get("test", "data", "diff_delim", "sim_data_20vars_100cases.csv");
 
+        String algorithm = "gfcic";
         String data = dataFile.toAbsolutePath().toString();
         String delimiter = ",";
-        String dirOut = tmpDir.newFolder("fgsc").toString();
-        String outputPrefix = "fgs";
+        String dirOut = tmpDir.newFolder(algorithm).toString();
+        String outputPrefix = algorithm;
         String[] args = {
-            "--algorithm", "fgsc",
+            "--algorithm", algorithm,
             "--data", data,
             "--delimiter", delimiter,
             "--out", dirOut,
             "--verbose",
-            "--output-prefix", outputPrefix,
-            "--json"
+            "--json",
+            "--output-prefix", outputPrefix
         };
         CausalCmdApplication.main(args);
 
