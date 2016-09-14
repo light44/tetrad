@@ -62,7 +62,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>edu.cmu.tetrad.cli.TetradCliApp</mainClass>
+                                    <mainClass>edu.cmu.tetrad.cli.CausalCmdApplication</mainClass>
                                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 </manifest>
                             </archive>
