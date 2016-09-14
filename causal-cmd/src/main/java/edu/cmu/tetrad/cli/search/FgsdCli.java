@@ -51,13 +51,13 @@ public class FgsdCli extends AbstractAlgorithmCli {
 
     public static final int CATEGORY_LIMIT = 10;
 
-    private double structurePrior;
-    private double samplePrior;
-    private int maxInDegree;
-    private boolean faithfulnessAssumed;
+    protected double structurePrior;
+    protected double samplePrior;
+    protected int maxInDegree;
+    protected boolean faithfulnessAssumed;
 
-    private boolean skipUniqueVarName;
-    private boolean skipCategoryLimit;
+    protected boolean skipUniqueVarName;
+    protected boolean skipCategoryLimit;
 
     public FgsdCli(String[] args) {
         super(args);
