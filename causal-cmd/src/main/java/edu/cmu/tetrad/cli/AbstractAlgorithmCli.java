@@ -28,13 +28,8 @@ import edu.cmu.tetrad.data.IKnowledge;
 import edu.cmu.tetrad.graph.Graph;
 import edu.cmu.tetrad.io.DataReader;
 import edu.cmu.tetrad.util.Parameters;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Set;
@@ -134,7 +129,8 @@ public abstract class AbstractAlgorithmCli extends CommonTask implements Algorit
         Parameters parameters = getParameters();
         Graph graph = search(dataSet, algorithm, parameters);
 
-        writeResult(heading, createRunInfo(excludedVariables, dataSet), graph);
+        Path outputFile = Paths.get(dirOut.toString(), outputPrefix + ".txt");
+        writeOutResult(heading, createRunInfo(excludedVariables, dataSet), graph, outputFile);
 
         if (isSerializeJson) {
             writeOutJson(outputPrefix, graph, Paths.get(dirOut.toString(), outputPrefix + "_graph.json"));
@@ -200,17 +196,6 @@ public abstract class AbstractAlgorithmCli extends CommonTask implements Algorit
         printValidationInfos(fmt);
 
         return fmt.toString();
-    }
-
-    private void writeResult(String heading, String runInfo, Graph graph) {
-        Path outputFile = Paths.get(dirOut.toString(), outputPrefix + ".txt");
-        try (PrintStream writer = new PrintStream(new BufferedOutputStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE)))) {
-            writer.println(heading);
-            writer.println(runInfo);
-            writer.println(graph.toString());
-        } catch (IOException exception) {
-            exception.printStackTrace(System.err);
-        }
     }
 
     private void runDataValidations(DataSet dataSet) {

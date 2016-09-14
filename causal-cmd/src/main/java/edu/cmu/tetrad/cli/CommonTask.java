@@ -21,7 +21,6 @@ package edu.cmu.tetrad.cli;
 import edu.cmu.tetrad.algcomparison.algorithm.Algorithm;
 import edu.cmu.tetrad.cli.data.IKnowledgeFactory;
 import edu.cmu.tetrad.cli.util.AppTool;
-import edu.cmu.tetrad.cli.util.DateTime;
 import edu.cmu.tetrad.cli.util.FileIO;
 import edu.cmu.tetrad.cli.util.JsonSerializer;
 import edu.cmu.tetrad.data.DataSet;
@@ -68,28 +67,30 @@ public abstract class CommonTask {
         LOGGER.error(errMsg, exception);
     }
 
+    protected void writeOutResult(String heading, String runInfo, Graph graph, Path outputFile) {
+        String fileName = outputFile.getFileName().toString();
+        String task = "writing out result file " + fileName;
+        logStartTask(task);
+        try (PrintStream writer = new PrintStream(new BufferedOutputStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE)))) {
+            writer.println(heading);
+            writer.println(runInfo);
+            writer.println(graph.toString());
+        } catch (IOException exception) {
+            logFailedTask(task, exception);
+        }
+        logEndTask(task);
+    }
+
     protected void writeOutJson(String graphId, Graph graph, Path outputFile) {
-        if (graph == null) {
-            return;
-        }
-
+        String fileName = outputFile.getFileName().toString();
+        String task = "writing out Json file " + fileName;
+        logStartTask(task);
         try (PrintStream graphWriter = new PrintStream(new BufferedOutputStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE)))) {
-            String fileName = outputFile.getFileName().toString();
-
-            String msg = String.format("Writing out Json file '%s'.", fileName);
-            System.out.printf("%s: %s%n", DateTime.printNow(), msg);
-            LOGGER.info(msg);
-
             JsonSerializer.writeToStream(JsonSerializer.serialize(graph, graphId), graphWriter);
-
-            msg = String.format("Finished writing out Json file '%s'.", fileName);
-            System.out.printf("%s: %s%n", DateTime.printNow(), msg);
-            LOGGER.info(msg);
-        } catch (Throwable throwable) {
-            String errMsg = String.format("Failed when writing out Json file '%s'.", outputFile.getFileName().toString());
-            System.err.println(errMsg);
-            LOGGER.error(errMsg, throwable);
+        } catch (Exception exception) {
+            logFailedTask(task, exception);
         }
+        logEndTask(task);
     }
 
     protected Graph search(DataSet dataSet, Algorithm algorithm, Parameters parameters) {
@@ -111,6 +112,7 @@ public abstract class CommonTask {
                 knowledge = IKnowledgeFactory.readInKnowledge(knowledgeFile);
             } catch (IOException exception) {
                 logFailedTask(task, exception);
+                System.exit(-127);
             }
             logEndTask(task);
         }
@@ -127,6 +129,7 @@ public abstract class CommonTask {
             dataSet = excludedVariables.isEmpty() ? dataReader.readInData() : dataReader.readInData(excludedVariables);
         } catch (IOException exception) {
             logFailedTask(task, exception);
+            System.exit(-127);
         }
         logEndTask(task);
 
@@ -143,6 +146,7 @@ public abstract class CommonTask {
                 variables.addAll(FileIO.extractUniqueLine(variableFile));
             } catch (IOException exception) {
                 logFailedTask(task, exception);
+                System.exit(-127);
             }
             logEndTask(task);
         }
