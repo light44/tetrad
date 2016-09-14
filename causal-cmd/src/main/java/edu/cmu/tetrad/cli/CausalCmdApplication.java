@@ -19,6 +19,7 @@
 package edu.cmu.tetrad.cli;
 
 import edu.cmu.tetrad.cli.search.FgscCli;
+import edu.cmu.tetrad.cli.search.FgsdCli;
 import edu.cmu.tetrad.cli.util.AppTool;
 import edu.cmu.tetrad.cli.util.Args;
 import java.util.HashMap;
@@ -61,6 +62,8 @@ public class CausalCmdApplication {
             switch (algorithmType) {
                 case FGSC:
                     return new FgscCli(args);
+                case FGSD:
+                    return new FgsdCli(args);
                 default:
                     return null;
             }
